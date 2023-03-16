@@ -1,11 +1,9 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
 using namespace std;
-#define N 20293
+
 string rand_str(const int len)  /*参数为字符串的长度*/
 {
-
     /*初始化*/
     string str;                 /*声明用来保存随机字符串的str*/
     char c;                     /*声明字符c，用来保存随机生成的字符*/
@@ -84,6 +82,62 @@ bool search(struct ex_hash *myhash,string key,int &value){
         return false;
     }
 }
+void expand(ex_hash *myhash,string key){
+    std::hash<string> trans;
+    size_t hash_value =trans(key);
+    int i,j,k;
+    int loc1=hash_value>>(64-myhash->global_depth);
+    myhash->global_depth=myhash->global_depth+1;
+    int newsize=1<<myhash->global_depth;
+    //struct segment *temp[newsize];
+    temp=new struct segment*[newsize];
+    int loc2=loc1<<1,loc3=loc2+1;
+    for(i=0;i<newsize;i++){
+           temp[i]=myhash->directory[i/2];
+        } //更新新目录的各个指向 
+        struct segment *p=myhash->directory[loc1];
+        temp[loc2]=new struct segment;
+        temp[loc2]->local_depth=myhash->directory[loc1]->local_depth+1;
+        temp[loc3]=new struct segment;
+        temp[loc3]->local_depth=myhash->directory[loc1]->local_depth+1;
+        for(i=0;i<1024;i++){
+           for(j=0;j<8;j++){
+              if(myhash->directory[loc1]->b[i].kv[j].key!="NULL"){
+                    std::hash<string> temptrans;
+                    size_t temp_hash_value =temptrans(myhash->directory[loc1]->b[i].kv[j].key);
+                    if(temp_hash_value>>(64-myhash->global_depth)==loc2){
+                        for(k=0;k<8;k++){
+                           if(temp[loc2]->b[hash_value&1023].kv[k].key=="NULL"){
+                                  temp[loc2]->b[hash_value&1023].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
+                                  temp[loc2]->b[hash_value&1023].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
+                                  break;
+                                  }
+                                        }
+                    }else{
+                        for(k=0;k<8;k++){
+                           if(temp[loc3]->b[hash_value&1023].kv[k].key=="NULL"){
+                                  temp[loc3]->b[hash_value&1023].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
+                                  temp[loc3]->b[hash_value&1023].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
+                                  break;
+                                  }
+                    }
+              }
+           }
+        }
+        
+    }
+    
+    myhash->directory=temp;
+    
+    delete p;
+    p=NULL;
+    
+    return;
+
+
+
+}
+
 
 int main(int argc,char **argv){
     
@@ -108,24 +162,26 @@ int main(int argc,char **argv){
     myhash->directory[3]->local_depth=2; 
     insert(myhash,"testfor",666);
     insert(myhash,"wadaasd",1111);
-    insert(myhash,"adwwa",333);
-    insert(myhash,"wad111d",444);
-    insert(myhash,"adwasdasdwa",555);
+    insert(myhash,"wadaasd",1111);
+    /*
+    if(insert(myhash,"wadaasd",1111)==false){
+        expand(myhash,"wadaasd");
+    }  */
     int z;
-    string ss[N];
-    for(z=0;z<N;z++){
+    string ss[19];
+    for(z=0;z<1900;z++){
        string rs =rand_str(14);
-       ss[z]=rs;
-
+       if(z%100==0){
+        ss[z/100]=rs;
+       }
     while(insert(myhash,rs,z+1)==false){
-
        std::hash<string> trans;
        size_t hash_value =trans(rs);
        if(myhash->global_depth==myhash->directory[hash_value>>(64-myhash->global_depth)]->local_depth){
             int i,j,k;
             int loc1=hash_value>>(64-myhash->global_depth);
             myhash->global_depth=myhash->global_depth+1;
-            int newsize=1<<(myhash->global_depth);
+            int newsize=1<<myhash->global_depth;
             newtemp=new struct segment*[newsize];
             int loc2=loc1<<1,loc3=loc2+1;
             for(i=0;i<newsize;i++){
@@ -156,20 +212,20 @@ int main(int argc,char **argv){
                 for(j=0;j<8;j++){
                     if(myhash->directory[loc1]->b[i].kv[j].key!="NULL"){
                             std::hash<string> temptrans;
-                            size_t temp_hash_value =temptrans(myhash->directory[loc1]->b[i].kv[j].key); 
+                            size_t temp_hash_value =temptrans(myhash->directory[loc1]->b[i].kv[j].key);
                             if(temp_hash_value>>(64-myhash->global_depth)==loc2){
                                 for(k=0;k<8;k++){
-                                   if(newtemp[loc2]->b[i].kv[k].key=="NULL"){
-                                        newtemp[loc2]->b[i].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
-                                        newtemp[loc2]->b[i].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;            
+                                if(newtemp[loc2]->b[hash_value&1023].kv[k].key=="NULL"){
+                                        newtemp[loc2]->b[hash_value&1023].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
+                                        newtemp[loc2]->b[hash_value&1023].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                         break;
                                         }
                                                 }
                             }else{
                                 for(k=0;k<8;k++){
-                                if(newtemp[loc3]->b[i].kv[k].key=="NULL"){
-                                        newtemp[loc3]->b[i].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
-                                        newtemp[loc3]->b[i].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;  
+                                if(newtemp[loc3]->b[hash_value&1023].kv[k].key=="NULL"){
+                                        newtemp[loc3]->b[hash_value&1023].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
+                                        newtemp[loc3]->b[hash_value&1023].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                         break;
                                         }
                             }
@@ -179,71 +235,32 @@ int main(int argc,char **argv){
                 
             }
             struct segment *p=myhash->directory[loc1];
-            struct segment **q=myhash->directory;
             myhash->directory=newtemp;
             
             delete p;
             p=NULL;
-            delete q;
-            q=NULL;
 
                //目录和段深度一致，需要目录倍增
        }else{   //目录和段深度不一致，不需要目录倍增
-
-
-
-
-                   if(z==20293){
-                    std::hash<string> trans2;
-       size_t hash_value2 =trans(ss[z]);
-       cout<<endl<<"MSB:"<<(hash_value2>>(64-myhash->global_depth))<<endl;
-       cout<<"LSB:"<<(hash_value2&1023)<<endl;
-       cout<<"local_depth:"<<myhash->directory[16]->local_depth<<endl;
-        int value,value1;
-    for(int t=0;t<z-1;t++){
-        search(myhash,ss[t],value);
-        search(myhash,ss[t+1],value1);
-        if(value==value1){
-            cout<<"now is wrong"<<endl<<endl;         
-            break;
-        }
-    }
-    if(value!=value1){
-        cout<<"now is right"<<endl<<endl;
-    }
-
-       }
-
-
-
-
-
-
-
             single_segment = new struct segment;
-            for(int p=0;p<1024;p++)
-             for(int q=0;q<8;q++){
-                single_segment->b[p].kv[q].key="NULL";
-            }
             int i,j,k;
             int loc1,loc2;
             loc1=(hash_value>>(64-myhash->directory[hash_value>>(64-myhash->global_depth)]->local_depth));
-            loc1=loc1<<(myhash->global_depth-myhash->directory[hash_value>>(64-myhash->global_depth)]->local_depth);
-
+            loc1=loc1<<myhash->global_depth-myhash->directory[hash_value>>(64-myhash->global_depth)]->local_depth;
             myhash->directory[loc1]->local_depth++;
-            loc2=loc1+(1<<(myhash->global_depth-myhash->directory[loc1]->local_depth));
-
+            loc2=hash_value>>(64-myhash->directory[loc1]->local_depth);
+            loc2=loc2<<(myhash->global_depth-myhash->directory[loc1]->local_depth);
             single_segment->local_depth=myhash->directory[loc1]->local_depth;
             for(i=0;i<1024;i++){
                 for(j=0;j<8;j++){
                     if(myhash->directory[loc1]->b[i].kv[j].key!="NULL"){
                             std::hash<string> temptrans;
                             size_t temp_hash_value =temptrans(myhash->directory[loc1]->b[i].kv[j].key);
-                            if((temp_hash_value>>(64-myhash->directory[loc1]->local_depth))>=loc2){
+                            if(temp_hash_value>>(64-myhash->global_depth)>=loc2){
                                 for(k=0;k<8;k++){
-                                if(single_segment->b[i].kv[k].key=="NULL"){
-                                        single_segment->b[i].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
-                                        single_segment->b[i].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
+                                if(single_segment->b[hash_value&1023].kv[k].key=="NULL"){
+                                        single_segment->b[hash_value&1023].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
+                                        single_segment->b[hash_value&1023].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                         myhash->directory[loc1]->b[i].kv[j].key="NULL";
                                         break;
                                         }
@@ -259,48 +276,8 @@ int main(int argc,char **argv){
             for(i=loc2;i<direct;i++){
                 myhash->directory[i]=single_segment;
             }
-
-
-
-                               if(z==20293){
-                    std::hash<string> trans2;
-       size_t hash_value2 =trans(ss[z]);
-       cout<<endl<<"MSB:"<<(hash_value2>>(64-myhash->global_depth))<<endl;
-       cout<<"LSB:"<<(hash_value2&1023)<<endl;
-       cout<<"local_depth:"<<myhash->directory[16]->local_depth<<endl;
-        int value,value1;
-        /*
-    int o[32];
-    for(int r=0;r<32;r++){
-        o[r]=0;
-    }
-    for(int t=0;t<z-1;t++){
-        search(myhash,ss[t],value);
-        search(myhash,ss[t+1],value1);
-        
-        if(value==value1){
-         //   cout<<"now is wrong"<<endl<<endl;  
-          //  cout<<"t="<<t<<endl;   
-          //  cout<<"value="<<value<<endl;    
-            //break;
-            hash_value2 =trans(ss[t]);
-         o[(hash_value2>>(64-myhash->global_depth))]=1;
-        }
-    }
-    for(int r=0;r<32;r++){
-        if(o[r]==1){
-            cout<<"r="<<r<<endl;
-        }
-    }*/
-
-    if(value!=value1){
-        cout<<"now is right"<<endl<<endl;
-    }
-
-       }
-
-
-
+            
+            
        }         //目录和段深度不一致，仅仅需要扩展段即可
 
 
@@ -318,29 +295,24 @@ int main(int argc,char **argv){
     
     int value1;
     search(myhash,"wadaasd",value1);
-    cout<<"the value(1111) is:"<<value1<<endl;
+    cout<<"the value is:"<<value1<<endl;
 
+    insert(myhash,"adwwa",111221);
+    insert(myhash,"wad111d",2211);
 
     int value;
     search(myhash,"adwwa",value);
-    cout<<"the value(333) is:"<<value<<endl;
-    search(myhash,"adwasdasdwa",value);
-    cout<<"the value(555) is:"<<value<<endl;
-    search(myhash,"testfor",value);
-    cout<<"the value(666) is:"<<value<<endl;
+    cout<<"the value is:"<<value<<endl;
     cout<<"global:"<<myhash->global_depth<<endl;
-    for(z=0;z<N-1;z++){
+    insert(myhash,"adwasdasdwa",22222145);
+    search(myhash,"adwasdasdwa",value);
+    cout<<"the value is:"<<value<<endl;
+    search(myhash,"testfor",value);
+    cout<<"the value is:"<<value<<endl;
+    for(z=0;z<19;z++){
         search(myhash,ss[z],value);
-        search(myhash,ss[z+1],value1);
-        if(value==value1){
-            cout<<"wrong"<<endl;         
-            break;
-        }
+        cout<<"the value is:"<<value<<endl;
     }
-    if(value!=value1){
-        cout<<"right"<<endl;
-    }
-    
     return 0;
 }
 
