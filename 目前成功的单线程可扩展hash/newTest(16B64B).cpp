@@ -7,14 +7,14 @@
 
 using namespace std;
 using namespace chrono;
-#define N 80000000   //读写操作规模
-#define INITIAL 2048 //初始可扩展hash的段个数
-#define DEPTH 11     //初始深度，包括全局和局部
+#define N 15000000   //读写操作规模
+#define INITIAL 256 //初始可扩展hash的段个数
+#define DEPTH 8     //初始深度，包括全局和局部
 #define BUC 1024     //段内桶数
 #define MOD 1023     //桶内槽数
 #define LINER 100    //线性探测距离
 
-int global_number=0;
+
 
 struct KV{
     size_t key;
@@ -113,6 +113,7 @@ int main(int argc,char **argv){
        ss[time]=rs;
        std::hash<string> trans;
        size_t hash_value =trans(std::to_string(rs));
+       auto t1_insert = Clock::now();//计时开始
        while(insert(myhash,rs,time+1)==false){
             if(myhash->global_depth==myhash->directory[hash_value>>(64-myhash->global_depth)]->local_depth){
                 //插入失败由于没有空位导致，这里判断，是进行目录倍增还是进行段分裂
@@ -158,7 +159,6 @@ int main(int argc,char **argv){
                                             temp[loc2]->b[t%BUC].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
                                             temp[loc2]->b[t%BUC].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                             inner_empty=true;
-                                            global_number++;
                                             break;
                                         }
                                     }
@@ -174,7 +174,6 @@ int main(int argc,char **argv){
                                             temp[loc3]->b[t%BUC].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
                                             temp[loc3]->b[t%BUC].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                             inner_empty=true;
-                                            global_number++;
                                             break;
                                         }
                                     }
@@ -227,7 +226,6 @@ int main(int argc,char **argv){
                                             single_segment->b[t%BUC].kv[k].key=myhash->directory[loc1]->b[i].kv[j].key;
                                             single_segment->b[t%BUC].kv[k].value=myhash->directory[loc1]->b[i].kv[j].value;
                                             myhash->directory[loc1]->b[i].kv[j].key=0;
-                                            global_number++;
                                             empty=true;
                                             break;
                                         }
@@ -252,8 +250,8 @@ int main(int argc,char **argv){
 
 
        }
-
-
+     auto t2_insert = Clock::now();//计时结束
+     std::chrono::duration_cast<std::chrono::nanoseconds>(t2_insert - t1_insert).count();
     }
     auto t2 = Clock::now();//计时结束
     cout<<"global_depth is:"<<myhash->global_depth<<endl;
@@ -263,10 +261,9 @@ int main(int argc,char **argv){
         
         search(myhash,ss[z],value);
         if(z==6788401){
-        //    cout<<"z="<<z<< " and value="<<value<<endl;
         }
         if(value!=(z+1)){
-   //         cout<<z<<"  "<<value<<endl;
+
             number++;
             R=false;
             continue;
@@ -277,7 +274,7 @@ int main(int argc,char **argv){
         cout<<"output right."<<endl;
     }else{
         cout<<"wrong number:"<<number<<endl;
-        cout<<"迁移的数据量:"<<global_number<<endl;
+
     }
     bool find=false;
     std::hash<string> trans2;
@@ -288,6 +285,7 @@ int main(int argc,char **argv){
     auto t5 = Clock::now();//计时开始
     float m=100,n=124,x=234,y=321;
     for(int z=0;z<N;z++){
+       auto t1_read = Clock::now();//计时结束
        hash_value2 =trans2(std::to_string(ss[z]));
        loc11=hash_value2>>(64-myhash->global_depth);
        loc21=hash_value2&MOD;
@@ -304,13 +302,15 @@ int main(int argc,char **argv){
 
     }
      find=false;
+     auto t2_read = Clock::now();//计时结束
+     std::chrono::duration_cast<std::chrono::nanoseconds>(t2_read - t1_read).count();
     }
 
     auto t6 = Clock::now();//计时开始
 
-    std::cout<<N<<"次操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count())/1000000<<"ms"<<'\n';
+    std::cout<<N<<"次写操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count())/1000000<<"ms"<<'\n';
     std::cout<<"初始化延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t4 - t3).count())/1000000<<"ms"<< '\n';
-    std::cout<<N<<"次读取延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t6 - t5).count())/1000000<<"ms"<<'\n';
+    std::cout<<N<<"次读操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t6 - t5).count())/1000000<<"ms"<<'\n';
     float space=(float)N,total=1<<(2+10+myhash->global_depth),ratio=space/total;
     cout<<"空间利用率:"<<ratio<<endl;
     
