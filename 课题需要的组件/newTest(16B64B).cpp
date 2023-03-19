@@ -12,7 +12,7 @@ using namespace chrono;
 #define DEPTH 2     //初始深度，包括全局和局部
 #define BUC 2048     //段内桶数
 #define MOD 2047     //MOD取LSB
-#define LSB_DEPTH 11
+#define LSB_DEPTH 11  //为了后续计算空间利用率
 #define LINER 50    //线性探测距离
 
 
