@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace chrono;
-#define N 10000000   //读写操作规模
+#define N 100000000   //读写操作规模
 #define INITIAL 4 //初始可扩展hash的段个数
 #define DEPTH 2     //初始深度，包括全局和局部
 #define BUC 2048     //段内桶数
