@@ -4,15 +4,16 @@
 #include <cstdlib>
 #include<chrono>
 #include <ctime>
-
+#include <cmath>
 using namespace std;
 #define BUC 2048
 #define MOD 2047
 #define LINER 50
 #define INITIAL 32768 //初始的段数
 #define DEPTH 15     //初始深度
-#define N 100000000   //测试规模
+#define N 10000000   //测试规模
 #define M 50 //线程数
+
 
 struct KV{
     size_t key;
@@ -195,9 +196,11 @@ bool Extendible_Hash::insert(size_t key,size_t value){
     bool empty =false;
     std::hash<string> trans;
     size_t hash_value =trans(std::to_string(key));
+    
     int loc1=hash_value>>(64-this->global_depth);
     int loc2=hash_value&MOD;
     int i,j,k; 
+    
     for(i=loc2;i<((loc2)+LINER);i++){    //线性探测
         RETRY:
             if(this->directory[loc1]->b[i%BUC].lock==true){
@@ -216,6 +219,9 @@ bool Extendible_Hash::insert(size_t key,size_t value){
             }
 
     }
+    
+  //  std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count;
+    
     return empty;               
 }
 bool Extendible_Hash::search(size_t key,size_t &value){
@@ -226,6 +232,7 @@ bool Extendible_Hash::search(size_t key,size_t &value){
     int loc1=hash_value>>(64-this->global_depth);
     int loc2=hash_value&MOD;
     int i,j;
+    
     for(i=loc2;i<((loc2)+LINER);i++){
         RETRY:
         if(this->directory[loc1]->b[i%BUC].lock==true){
@@ -244,6 +251,9 @@ bool Extendible_Hash::search(size_t key,size_t &value){
             this->directory[loc1]->b[i%BUC].lock==false;
         }
     }
+    
+ //   std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count;
+    
     return find;
 }
 int Extendible_Hash::get_global_depth(){
@@ -253,15 +263,23 @@ int Extendible_Hash::get_global_depth(){
 
 void Extendible_Hash::multi_thread_insert(size_t key[N],size_t value[N],int left,int right){
            int i;
+      //     typedef std::chrono::steady_clock Clock;
            for(i=left;i<=right;i++){
+      //        auto t1 = Clock::now();//计时开始
               this->insert(key[i],value[i]);
+       //       auto t2 = Clock::now();//计时结束
+      //        auto delay = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
            }
            return ;
 }
 void Extendible_Hash::multi_thread_search(size_t key[N],size_t value[N],int left,int right){
            int i;
+       //    typedef std::chrono::steady_clock Clock;
            for(i=left;i<=right;i++){
+         //     auto t1 = Clock::now();//计时开始
               this->search(key[i],value[i]);
+         //     auto t2 = Clock::now();//计时开始
+         //     auto delay = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
            }
            return ;
 }
@@ -381,7 +399,7 @@ int main() {
     th49.join();
     th50.join();
     auto t2 = Clock::now();//计时开始
-    std::cout<<M<<"个多线程的"<<N<<"次写操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count())/1000000<<"ms"<<'\n';
+    std::cout<<M<<"个线程的"<<N<<"次写操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count())/1000000<<"ms"<<'\n';
 
     auto t3 = Clock::now();//计时开始
     thread th_1(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,0,(N/M*1-1));
@@ -487,7 +505,7 @@ int main() {
     th_49.join();
     th_50.join();
     auto t4 = Clock::now();//计时开始
-    std::cout<<M<<"个多线程的"<<N<<"次读操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t4 - t3).count())/1000000<<"ms"<<'\n';
+    std::cout<<M<<"个线程的"<<N<<"次读操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t4 - t3).count())/1000000<<"ms"<<'\n';
 
     
 
