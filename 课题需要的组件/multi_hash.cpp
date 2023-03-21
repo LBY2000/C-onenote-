@@ -295,216 +295,29 @@ int main() {
         key_array[i]=i*2+1;
         value_array[i]=i+1;
     }
-    auto t1 = Clock::now();//计时开始
-    thread th1(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,0,(N/M*1-1));
-    thread th2(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*1),(N/M*2-1));
-    thread th3(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*2),(N/M*3-1));
-    thread th4(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*3),(N/M*4-1));
-    thread th5(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*4),(N/M*5-1));
-    thread th6(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*5),(N/M*6-1));
-    thread th7(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*6),(N/M*7-1));
-    thread th8(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*7),(N/M*8-1));
-    thread th9(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*8),(N/M*9-1));
-    thread th10(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*9),(N/M*10-1));
-    thread th11(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*10),(N/M*11-1));
-    thread th12(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*11),(N/M*12-1));
-    thread th13(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*12),(N/M*13-1));
-    thread th14(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*13),(N/M*14-1));
-    thread th15(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*14),(N/M*15-1));
-    thread th16(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*15),(N/M*16-1));
-    thread th17(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*16),(N/M*17-1));
-    thread th18(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*17),(N/M*18-1));
-    thread th19(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*18),(N/M*19-1));
-    thread th20(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*19),(N/M*20-1));
-    thread th21(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*20),(N/M*21-1));
-    thread th22(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*21),(N/M*22-1));
-    thread th23(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*22),(N/M*23-1));
-    thread th24(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*23),(N/M*24-1));
-    thread th25(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*24),(N/M*25-1));
-    thread th26(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*25),(N/M*26-1));
-    thread th27(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*26),(N/M*27-1));
-    thread th28(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*27),(N/M*28-1));
-    thread th29(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*28),(N/M*29-1));
-    thread th30(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*29),(N/M*30-1));
-    thread th31(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*30),(N/M*31-1));
-    thread th32(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*31),(N/M*32-1));
-    thread th33(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*32),(N/M*33-1));
-    thread th34(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*33),(N/M*34-1));
-    thread th35(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*34),(N/M*35-1));
-    thread th36(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*35),(N/M*36-1));
-    thread th37(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*36),(N/M*37-1));
-    thread th38(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*37),(N/M*38-1));
-    thread th39(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*38),(N/M*39-1));
-    thread th40(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*39),(N/M*40-1));
-    thread th41(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*40),(N/M*41-1));
-    thread th42(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*41),(N/M*42-1));
-    thread th43(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*42),(N/M*43-1));
-    thread th44(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*43),(N/M*44-1));
-    thread th45(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*44),(N/M*45-1));
-    thread th46(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*45),(N/M*46-1));
-    thread th47(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*46),(N/M*47-1));
-    thread th48(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*47),(N/M*48-1));
-    thread th49(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*48),(N/M*49-1));
-    thread th50(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M*49),(N/M*50-1));
-   // thread th20(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,2000000,2499999)
 
-    th1.join();
-    th2.join();
-    th3.join();
-    th4.join();
-    th5.join();
-    th6.join();
-    th7.join();
-    th8.join();
-    th9.join();
-    th10.join();
-    th11.join();
-    th12.join();
-    th13.join();
-    th14.join();
-    th15.join();
-    th16.join();
-    th17.join();
-    th18.join();
-    th19.join();
-    th20.join();
-    th21.join();
-    th22.join();
-    th23.join();
-    th24.join();
-    th25.join();
-    th26.join();
-    th27.join();
-    th28.join();
-    th29.join();
-    th30.join();
-    th31.join();
-    th32.join();
-    th33.join();
-    th34.join();
-    th35.join();
-    th36.join();
-    th37.join();
-    th38.join();
-    th39.join();
-    th40.join();
-    th41.join();
-    th42.join();
-    th43.join();
-    th44.join();
-    th45.join();
-    th46.join();
-    th47.join();
-    th48.join();
-    th49.join();
-    th50.join();
-    auto t2 = Clock::now();//计时开始
+    auto t1 = Clock::now();//计时开始
+    thread *th[M];
+    for(int num=0;num<M;num++){
+       th[num]=new thread(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M)*num,((N/M)*(num+1)-1));
+        
+    }
+    for(int num=0;num<M;num++){
+       th[num]->join();
+    }
+    auto t2 = Clock::now();//计时结束
     std::cout<<M<<"个线程的"<<N<<"次写操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count())/1000000<<"ms"<<'\n';
 
-    auto t3 = Clock::now();//计时开始
-    thread th_1(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,0,(N/M*1-1));
-    thread th_2(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*1),(N/M*2-1));
-    thread th_3(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*2),(N/M*3-1));
-    thread th_4(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*3),(N/M*4-1));
-    thread th_5(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*4),(N/M*5-1));
-    thread th_6(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*5),(N/M*6-1));
-    thread th_7(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*6),(N/M*7-1));
-    thread th_8(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*7),(N/M*8-1));
-    thread th_9(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*8),(N/M*9-1));
-    thread th_10(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*9),(N/M*10-1));
-    thread th_11(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*10),(N/M*11-1));
-    thread th_12(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*11),(N/M*12-1));
-    thread th_13(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*12),(N/M*13-1));
-    thread th_14(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*13),(N/M*14-1));
-    thread th_15(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*14),(N/M*15-1));
-    thread th_16(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*15),(N/M*16-1));
-    thread th_17(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*16),(N/M*17-1));
-    thread th_18(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*17),(N/M*18-1));
-    thread th_19(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*18),(N/M*19-1));
-    thread th_20(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*19),(N/M*20-1));
-    thread th_21(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*20),(N/M*21-1));
-    thread th_22(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*21),(N/M*22-1));
-    thread th_23(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*22),(N/M*23-1));
-    thread th_24(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*23),(N/M*24-1));
-    thread th_25(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*24),(N/M*25-1));
-    thread th_26(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*25),(N/M*26-1));
-    thread th_27(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*26),(N/M*27-1));
-    thread th_28(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*27),(N/M*28-1));
-    thread th_29(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*28),(N/M*29-1));
-    thread th_30(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*29),(N/M*30-1));
-    thread th_31(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*30),(N/M*31-1));
-    thread th_32(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*31),(N/M*32-1));
-    thread th_33(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*32),(N/M*33-1));
-    thread th_34(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*33),(N/M*34-1));
-    thread th_35(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*34),(N/M*35-1));
-    thread th_36(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*35),(N/M*36-1));
-    thread th_37(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*36),(N/M*37-1));
-    thread th_38(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*37),(N/M*38-1));
-    thread th_39(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*38),(N/M*39-1));
-    thread th_40(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*39),(N/M*40-1));
-    thread th_41(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*40),(N/M*41-1));
-    thread th_42(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*41),(N/M*42-1));
-    thread th_43(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*42),(N/M*43-1));
-    thread th_44(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*43),(N/M*44-1));
-    thread th_45(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*44),(N/M*45-1));
-    thread th_46(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*45),(N/M*46-1));
-    thread th_47(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*46),(N/M*47-1));
-    thread th_48(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*47),(N/M*48-1));
-    thread th_49(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*48),(N/M*49-1));
-    thread th_50(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M*49),(N/M*50-1));
-   // thread th20(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,2000000,2499999)
 
-    th_1.join();
-    th_2.join();
-    th_3.join();
-    th_4.join();
-    th_5.join();
-    th_6.join();
-    th_7.join();
-    th_8.join();
-    th_9.join();
-    th_10.join();
-    th_11.join();
-    th_12.join();
-    th_13.join();
-    th_14.join();
-    th_15.join();
-    th_16.join();
-    th_17.join();
-    th_18.join();
-    th_19.join();
-    th_20.join();
-    th_21.join();
-    th_22.join();
-    th_23.join();
-    th_24.join();
-    th_25.join();
-    th_26.join();
-    th_27.join();
-    th_28.join();
-    th_29.join();
-    th_30.join();
-    th_31.join();
-    th_32.join();
-    th_33.join();
-    th_34.join();
-    th_35.join();
-    th_36.join();
-    th_37.join();
-    th_38.join();
-    th_39.join();
-    th_40.join();
-    th_41.join();
-    th_42.join();
-    th_43.join();
-    th_44.join();
-    th_45.join();
-    th_46.join();
-    th_47.join();
-    th_48.join();
-    th_49.join();
-    th_50.join();
-    auto t4 = Clock::now();//计时开始
+    auto t3 = Clock::now();//计时开始
+    thread *th_search[M];
+    for(int num=0;num<M;num++){
+       th_search[num]=new thread(&Extendible_Hash::multi_thread_search,&myhash,key_array,identity_value_array,(N/M)*num,((N/M)*(num+1)-1));
+    }
+    for(int num=0;num<M;num++){
+       th_search[num]->join();
+    }
+    auto t4 = Clock::now();//计时结束
     std::cout<<M<<"个线程的"<<N<<"次读操作延迟:" <<float(std::chrono::duration_cast<std::chrono::nanoseconds>(t4 - t3).count())/1000000<<"ms"<<'\n';
 
     
