@@ -307,7 +307,7 @@ int main() {
     std::vector<std::thread> threads,threads_2;
     for (int i = 0; i < M; ++i)
     {
-        threads.emplace_back(&Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M)*i,((N/M)*(i+1)-1));
+        threads.emplace_back(Extendible_Hash::multi_thread_insert,&myhash,key_array,value_array,(N/M)*i,((N/M)*(i+1)-1));
     }
     auto t1 = Clock::now();//计时开始
     for (auto& thread : threads)
